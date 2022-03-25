@@ -1,0 +1,25 @@
+﻿@model IEnumerable<School.Models.Student>
+
+@{ 
+    ViewBag.Title = "List of Students";
+}
+
+<h2>List of Students</h2>
+<div>There  are @Model.Count() students in the School</div>
+<form method="get" action="/Student/List">
+    <input type="text" name="searchkey" value="" placeholder="Search here" />
+    <input type="submit" value="Search" />
+</form>
+<div>
+    @{ 
+        foreach(School.Models.Student Student in Model)
+        {
+            string url = "/Student/Show/" + Student.StudentId;
+        <div>
+            <a href="@url">@Student.StudentNumber @Student.StudentFName @Student.StudentLName</a>
+        </div>
+            
+        }
+
+    }
+</div>

@@ -1,0 +1,23 @@
+﻿@model School.Models.Teacher
+
+@{ 
+    ViewBag.Title = "Show Teacher";
+}
+
+<h2>Show Teacher</h2>
+
+<div>
+  <span>Employee Number :</span> @Model.TeacherEmployeeNumber
+</div>
+<div>
+    <span>First Name:</span> @Model.TeacherFName
+</div>
+<div>
+    <span>Last Name:</span> @Model.TeacherLName
+</div>
+<div>
+    <span>Salary:</span>$ @Model.TeacherSalary
+</div>
+<div>
+    <span>Hired:</span> @Model.TeacherHireDate
+</div>
