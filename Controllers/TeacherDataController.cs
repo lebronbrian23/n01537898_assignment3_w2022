@@ -91,7 +91,8 @@ namespace School.Controllers
             MySqlCommand cmd = Conn.CreateCommand();
 
             //sql query
-            cmd.CommandText = "select * from teachers where teacherid = " + id;
+           // cmd.CommandText = "select * from teachers where teacherid = " + id;
+            cmd.CommandText = "SELECT * FROM classes JOIN teachers on classes.teacherid = " + id;
 
             //set results of the query in to a variable
             MySqlDataReader ResultSet = cmd.ExecuteReader();
@@ -102,6 +103,7 @@ namespace School.Controllers
             //lopp through each row
             while (ResultSet.Read())
             {
+               
                 //access column data from the db
                 selectedTeacher.TeacherId = Convert.ToInt32(ResultSet["teacherid"]);
                 selectedTeacher.TeacherEmployeeNumber = ResultSet["employeenumber"].ToString();
@@ -109,6 +111,8 @@ namespace School.Controllers
                 selectedTeacher.TeacherLName = ResultSet["teacherlname"].ToString();
                 selectedTeacher.TeacherHireDate = ResultSet["hiredate"].ToString().Substring(0, 10);
                 selectedTeacher.TeacherSalary = ResultSet["salary"].ToString();
+                selectedTeacher.ClassName = ResultSet["classname"].ToString();
+                selectedTeacher.ClassCode = ResultSet["classcode"].ToString();
 
 
             }
