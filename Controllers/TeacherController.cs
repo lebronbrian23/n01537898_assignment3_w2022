@@ -42,6 +42,79 @@ namespace School.Controllers
 
         }
 
+        //GET /Teacher/new
+        [Route("/Teacher/New")]
+        public ActionResult New()
+        {
+
+            return View();
+        }
+
+        //POST: /Teacher/Create
+        [Route("/Teacher/Create")]
+        public ActionResult Create(string teacherfname,string teacherlname , string employeenumber ,
+            string salary, string hiredate)
+        {
+            if (teacherfname == "") {
+                return RedirectToAction("New");
+            }
+            if (teacherlname == "") {
+                return RedirectToAction("New");
+
+            }
+            if (employeenumber == null) {
+                return RedirectToAction("New");
+            }
+            if (hiredate == null) {
+                return RedirectToAction("New");
+            }
+            if (salary == null) {
+                return RedirectToAction("New");
+            }
+
+            Teacher NewTeacher = new Teacher();
+            NewTeacher.TeacherFName = teacherfname;
+            NewTeacher.TeacherLName = teacherlname;
+            NewTeacher.TeacherEmployeeNumber = employeenumber;
+            NewTeacher.TeacherHireDate = hiredate;
+            NewTeacher.TeacherSalary = salary;
+
+            TeacherDataController controller = new TeacherDataController();
+            controller.AddTeacher(NewTeacher);
+
+            // redirect back to the list page
+            return RedirectToAction("List");
+        }
+
+
+        //GET /Teacher/delete/{id}
+        [Route("/Teacher/DeleteConfirm/{id}")]
+        public ActionResult DeleteConfirm(int id)
+        {
+
+            TeacherDataController controller = new TeacherDataController();
+            Teacher selectedTeacher = controller.findTeacher(id);
+            return View(selectedTeacher);
+        }
+
+        /// <summary>
+        /// This function deletes a teacher from the database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        //POST: /Teacher/Delete/{id}
+        //[Route("/Teacher/Delete/{id}")]
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+
+            TeacherDataController controller = new TeacherDataController();
+            controller.DeleteTeacher(id);
+            return RedirectToAction("List");
+
+        }
+
+
     }
 }
 

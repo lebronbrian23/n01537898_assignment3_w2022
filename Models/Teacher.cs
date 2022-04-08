@@ -18,7 +18,9 @@ namespace School.Models
         public string TeacherSalary { get; set; }
 
         public string TeacherHireDate { get; set; }
+
         public string ClassName { get; set; }
+
         public string ClassCode { get; set; }
     }
 }

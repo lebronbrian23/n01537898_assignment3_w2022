@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using School.Models;
 using MySql.Data.MySqlClient;
+using System.Web.Http.Cors;
 using System.Diagnostics;
 
 namespace School.Controllers
@@ -76,7 +77,12 @@ namespace School.Controllers
             //Return the final list of Teacher names
             return Teachers;
         }
-
+        
+        /// <summary>
+        /// function to find a teacher by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("api/Teacherdata/findTeacher/{id}")]
         public Teacher findTeacher(int id)
@@ -91,8 +97,10 @@ namespace School.Controllers
             MySqlCommand cmd = Conn.CreateCommand();
 
             //sql query
-           // cmd.CommandText = "select * from teachers where teacherid = " + id;
-            cmd.CommandText = "SELECT * FROM classes JOIN teachers on classes.teacherid = " + id;
+            //cmd.CommandText = "select * from teachers where teacherid = @id";
+            cmd.CommandText = "SELECT classes.teacherid ,teachers.teacherfname,teachers.teacherlname, teachers.hiredate,classes.classcode ,teachers.employeenumber , teachers.salary ,classes.classname FROM classes JOIN teachers on teachers.teacherid = classes.teacherid where classes.teacherid =  @id";
+            cmd.Parameters.AddWithValue("@id", id);
+            cmd.Prepare();
 
             //set results of the query in to a variable
             MySqlDataReader ResultSet = cmd.ExecuteReader();
@@ -113,7 +121,7 @@ namespace School.Controllers
                 selectedTeacher.TeacherSalary = ResultSet["salary"].ToString();
                 selectedTeacher.ClassName = ResultSet["classname"].ToString();
                 selectedTeacher.ClassCode = ResultSet["classcode"].ToString();
-
+                
 
             }
             //close connection
@@ -121,6 +129,76 @@ namespace School.Controllers
 
             //return the final list of thee Teacher names
             return selectedTeacher;
+        }
+
+        /// <summary>
+        /// function to add a new teacher to the school database
+        /// </summary>
+        /// <param name="NewTeacher"></param>
+       [HttpPost]
+       [Route("api/Teacherdata/AddTeacher")]
+       [EnableCors(origins:"*" , methods:"*" , headers:"*")]
+       public void AddTeacher(Teacher NewTeacher)
+        {
+            //create a connection to the db
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //open the connection between web server and database
+            Conn.Open();
+
+            //create a new query for the db
+            MySqlCommand cmd = Conn.CreateCommand();
+           
+            //sql query
+            cmd.CommandText = "insert into teachers (teacherfname , teacherlname , employeenumber , hiredate , salary)" +
+                "values (@teacherfname ,@teacherlname , @employeenumber ,@hiredate , @salary)";
+            cmd.Parameters.AddWithValue("@teacherfname" ,NewTeacher.TeacherFName);
+            cmd.Parameters.AddWithValue("@teacherlname" , NewTeacher.TeacherLName);
+            cmd.Parameters.AddWithValue("@employeenumber" ,NewTeacher.TeacherEmployeeNumber);
+            cmd.Parameters.AddWithValue("@salary", NewTeacher.TeacherSalary);
+            cmd.Parameters.AddWithValue("@hiredate", NewTeacher.TeacherHireDate);
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
+        }
+
+
+        /// <summary>
+        /// method to delete a teacher from the db
+        /// </summary>
+        /// <param name="id">The primary  key</param>
+        [HttpPost]
+        [Route ("api/delete/teacher/{id}")]
+        [EnableCors (origins:"*" , methods:"*" , headers:"*")]
+        public void DeleteTeacher(int id)
+        {
+            //create connection instance
+            MySqlConnection Conn = School.AccessDatabase();
+            MySqlConnection Conn2 = School.AccessDatabase();
+
+            //open a connection between database server and web server
+            Conn.Open ();
+            Conn2.Open ();
+
+            //create a new command for the db
+            MySqlCommand cmd = Conn.CreateCommand ();
+            MySqlCommand cmd2 = Conn2.CreateCommand ();
+
+            cmd.CommandText = "UPDATE classes SET teacherid = NULL WHERE teacherid = @id";
+            cmd2.CommandText = "delete from teachers where teacherid = @id";
+            cmd.Parameters.AddWithValue("@id" ,id);
+            cmd2.Parameters.AddWithValue("@id" ,id);
+            cmd.Prepare ();
+            cmd2.Prepare ();
+
+            cmd2.ExecuteNonQuery ();
+            cmd.ExecuteNonQuery ();
+
+            Conn.Close ();
+            Conn2.Close ();
+
         }
 
     }
