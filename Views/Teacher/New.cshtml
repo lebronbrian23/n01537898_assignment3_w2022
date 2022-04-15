@@ -5,14 +5,14 @@
 
 <h2>Add Teacher</h2>
 
-<form id="new_teacher" name="new_teacher" method="POST" @* action="/Teacher/Create"*@>
+<!----form id="new_teacher" name="new_teacher" method="POST" @* action="/Teacher/Create"*@> -->
     <div>
         <label for="fname">First Name</label>
-        <input type="text" id="fname" name="teacherfname" value="" />
+        <input type="text" id="teacherfname" name="teacherfname" value="" />
     </div>
     <div>
         <label for="lname">Last Name</label>
-        <input type="text" id="lname" name="teacherlname" value="" />
+        <input type="text"  id="teacherlname" name="teacherlname" value="" />
     </div>
     <div>
         <label for="employeenumber">Employee Number </label>
@@ -27,75 +27,12 @@
         <input type="date" id="hiredate" name="hiredate" value="" />
     </div>
     <div>
-        <input type="submit" value="Add" onclick="processForm();"/>
+        <button onclick="processForm();">Add </button>
     </div>
-</form>
+<!-- </form>-->
 <script>
     
-    //generate base url
-    let base_url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/";
-    //generate add teacher path
-    let add_teacher_url = base_url + "api/Teacherdata/AddTeacher";
+    
 
-    let form = document.forms.new_teacher;
-    // let delete_form = document.forms.delete_teacher;
-
-
-    //function to add a new teacher
-    function processForm() {
-        //form fields
-        let fname = form.teacherfname;
-        let lname = form.teacherlname;
-        let salary = form.salary;
-        let hiredate = form.hiredate;
-        let employeenumber = form.employeenumber;
-
-        //form input validation
-        if (fname.value === "" || fname.value === null) {
-            fname.style.background = "red";
-            fname.style.color = "white";
-            fname.focus();
-            return false;
-        }
-
-        if (lname.value === "" || lname.value === null) {
-            lname.style.background = "red";
-            lname.style.color = "white";
-            lname.focus();
-            return false;
-        }
-        if (employeenumber.value === "" || employeenumber.value === null) {
-            employeenumber.style.background = "red";
-            employeenumber.style.color = "white";
-            employeenumber.focus();
-            return false;
-        }
-
-        if (salary.value === "" || salary.value === null) {
-            salary.style.background = "red";
-            salary.style.color = "white";
-            salary.focus();
-            return false;
-        }
-
-        if (hiredate.value === "" || hiredate.value === null) {
-            hiredate.style.background = "red";
-            hiredate.style.color = "white";
-            hiredate.focus();
-            return false;
-        }
-
-        var xhttp = new XMLHttpRequest();
-
-        xhttp.onreadystatechange = function () {
-            if (this.status === 204) {
-                location.href = base_url + "teacher/list";
-            }
-        };
-        xhttp.open("POST", add_teacher_url, true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("teacherfname=" + fname.value + "&teacherlname=" + lname.value + "&teacheremployeenumber=" + employeenumber.value + "&teachersalary=" + salary.value + "&teacherhiredate=" + hiredate.value);
-
-    }
 
 </script>

@@ -9,33 +9,14 @@
 <div>
      <span> @Model.TeacherEmployeeNumber </span> - <span> @Model.TeacherFName  @Model.TeacherLName </span>
  </div>
-<form  method="POST" name="delete_teacher" id="delete_teacher" @*action="/teacher/delete/@Model.TeacherId"*@>
-    <input type="hidden" value="@Model.TeacherId"  name="id"/>
-    <input type="submit" value="Delete" onclick="processDeleteForm();"/>
+<!--<form  method="POST" name="delete_teacher" id="delete_teacher" @*action="/teacher/delete/@Model.TeacherId"*@> -->
+    <input type="hidden" value="@Model.TeacherId"  name="id" id="id"/>
+    <button onclick="processDeleteForm();">Delete</button>
 
-</form>
+<!--</form> -->
 
 <script>
 
-    //generate base url
-    let base_url = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/";
-    //generate delete teacher path
-    let delete_teacher_url = base_url + "api/delete/teacher/";
+    
 
-    let delete_form = document.forms.delete_teacher;
-
-    function processDeleteForm() {
-        
-        let id = delete_teacher.id.value;
-        var xhttp = new XMLHttpRequest();
-        
-        xhttp.open("POST", delete_teacher_url + id, true);
-        xhttp.send();
-        xhttp.onreadystatechange = function () {
-            if (this.status === 204) {
-                location.href = base_url + "teacher/list";
-            }
-        };
-       
-    }
 </script>

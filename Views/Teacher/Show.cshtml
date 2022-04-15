@@ -1,27 +1,36 @@
 ﻿@model School.Models.Teacher
 
-@{ 
+@{
     ViewBag.Title = "Show Teacher";
 }
 
 <h2>Show Teacher</h2>
-<a href="/teacher/deleteconfirm/@Model.TeacherId">Delete this teacher</a>
+<div class="navbar" style="background-color: white;">
+    <ul class="nav navbar-nav">
+        <li><a href="/teacher/list">Back to teacher list </a></li>
+        <li><a href="/teacher/edit/@Model.TeacherId">Edit this teacher</a></li>
+        <li><a class="alert-danger" href="/teacher/deleteconfirm/@Model.TeacherId">Delete this teacher</a></li>
+    </ul>
+</div>
+   
 
 <div>
-  <span>Employee Number :</span> @Model.TeacherEmployeeNumber
-</div>
-<div>
-    <span>First Name:</span> @Model.TeacherFName
-</div>
-<div>
-    <span>Last Name:</span> @Model.TeacherLName
-</div>
-<div>
-    <span>Courses taught :</span> @Model.ClassCode @Model.ClassName
-</div>
-<div>
-    <span>Salary:</span>$ @Model.TeacherSalary
-</div>
-<div>
-    <span>Hired:</span> @Model.TeacherHireDate
+    <p>
+        <span>Employee Number :</span> @Model.TeacherEmployeeNumber
+    </p>
+    <p>
+        <span>First Name:</span> @Model.TeacherFName
+    </p>
+    <p>
+        <span>Last Name:</span> @Model.TeacherLName
+    </p>
+    <p>
+        <span>Courses taught :</span> @Model.ClassCode @Model.ClassName
+    </p>
+    <p>
+        <span>Salary:</span>$ @Model.TeacherSalary
+    </p>
+    <p>
+        <span>Hired:</span> @Model.TeacherHireDate
+    </p>
 </div>

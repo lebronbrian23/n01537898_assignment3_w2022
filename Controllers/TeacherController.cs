@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -55,22 +56,11 @@ namespace School.Controllers
         public ActionResult Create(string teacherfname,string teacherlname , string employeenumber ,
             string salary, string hiredate)
         {
-            if (teacherfname == "") {
+            if (teacherfname == "" || teacherlname == "" || employeenumber == null || hiredate == null || salary == null)
+            {
                 return RedirectToAction("New");
             }
-            if (teacherlname == "") {
-                return RedirectToAction("New");
-
-            }
-            if (employeenumber == null) {
-                return RedirectToAction("New");
-            }
-            if (hiredate == null) {
-                return RedirectToAction("New");
-            }
-            if (salary == null) {
-                return RedirectToAction("New");
-            }
+            
 
             Teacher NewTeacher = new Teacher();
             NewTeacher.TeacherFName = teacherfname;
@@ -78,6 +68,7 @@ namespace School.Controllers
             NewTeacher.TeacherEmployeeNumber = employeenumber;
             NewTeacher.TeacherHireDate = hiredate;
             NewTeacher.TeacherSalary = salary;
+
 
             TeacherDataController controller = new TeacherDataController();
             controller.AddTeacher(NewTeacher);
@@ -111,6 +102,53 @@ namespace School.Controllers
             TeacherDataController controller = new TeacherDataController();
             controller.DeleteTeacher(id);
             return RedirectToAction("List");
+
+        }
+
+        //GET /Teacher/edit/{id}
+        [Route("/Teacher/Edit/{id}")]
+        public ActionResult Edit(int id)
+        {
+
+            TeacherDataController controller = new TeacherDataController();
+            Teacher selectedTeacher = controller.findTeacher(id);
+            return View(selectedTeacher);
+        }
+
+        /// <summary>
+        /// This function update a teacher from the database
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="teacherfname"></param>
+        /// <param name="teacherlname"></param>
+        /// <param name="employeenumber"></param>
+        /// <param name="salary"></param>
+        /// <param name="hiredate"></param>
+        /// <returns></returns>
+        //POST: /Teacher/Update/{id}
+        //[Route("/Teacher/Update/{id}")]
+        [HttpPost]
+        public ActionResult Update(int id ,string teacherfname, string teacherlname, string employeenumber,
+            string salary, string hiredate)
+        {
+            if (teacherfname == "" || teacherlname == "" || employeenumber == null || hiredate == null  || salary == null)
+            {
+                return RedirectToAction("/Teacher/Edit/" + id);
+            }
+
+            Teacher UpdateTeacher = new Teacher();
+            UpdateTeacher.TeacherFName = teacherfname;
+            UpdateTeacher.TeacherLName = teacherlname;
+            UpdateTeacher.TeacherEmployeeNumber = employeenumber;
+            UpdateTeacher.TeacherHireDate = hiredate;
+            UpdateTeacher.TeacherSalary = salary;
+
+
+            TeacherDataController controller = new TeacherDataController();
+            controller.UpdateTeacher(id , UpdateTeacher);
+
+            // redirect back to the Teacher after an update
+            return RedirectToAction("/Teacher/Show/"+id);
 
         }
 

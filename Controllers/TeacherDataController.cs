@@ -140,6 +140,7 @@ namespace School.Controllers
        [EnableCors(origins:"*" , methods:"*" , headers:"*")]
        public void AddTeacher(Teacher NewTeacher)
         {
+
             //create a connection to the db
             MySqlConnection Conn = School.AccessDatabase();
 
@@ -176,29 +177,73 @@ namespace School.Controllers
         {
             //create connection instance
             MySqlConnection Conn = School.AccessDatabase();
-            MySqlConnection Conn2 = School.AccessDatabase();
 
             //open a connection between database server and web server
             Conn.Open ();
-            Conn2.Open ();
 
             //create a new command for the db
             MySqlCommand cmd = Conn.CreateCommand ();
-            MySqlCommand cmd2 = Conn2.CreateCommand ();
 
             cmd.CommandText = "UPDATE classes SET teacherid = NULL WHERE teacherid = @id";
-            cmd2.CommandText = "delete from teachers where teacherid = @id";
+            
             cmd.Parameters.AddWithValue("@id" ,id);
-            cmd2.Parameters.AddWithValue("@id" ,id);
-            cmd.Prepare ();
-            cmd2.Prepare ();
 
-            cmd2.ExecuteNonQuery ();
-            cmd.ExecuteNonQuery ();
+            cmd.Prepare ();
+
+            cmd.ExecuteNonQuery();
+
+            //create a new delete teacher command for the db
+            MySqlCommand deleteCmd = Conn.CreateCommand();
+
+            deleteCmd.CommandText = "delete from teachers where teacherid = @id";
+
+            deleteCmd.Parameters.AddWithValue("@id", id);
+
+            deleteCmd.Prepare();
+
+            deleteCmd.ExecuteNonQuery();
 
             Conn.Close ();
-            Conn2.Close ();
 
+
+        }
+
+        /// <summary>
+        /// function to update a  teacher to the school database
+        /// </summary>
+        /// <param name="TeacherId"></param>
+        /// <param name="TeacherInfo"></param>
+
+        [HttpPost]
+        [Route("api/Teacherdata/AddTeacher")]
+        [EnableCors(origins: "*", methods: "*", headers: "*")]
+        public void UpdateTeacher(int TeacherId, Teacher TeacherInfo)
+        {
+
+            //create a connection to the db
+            MySqlConnection Conn = School.AccessDatabase();
+
+            //open the connection between web server and database
+            Conn.Open();
+
+            //create a new query for the db
+            MySqlCommand cmd = Conn.CreateCommand();
+
+            //sql query
+            cmd.CommandText = "update into teachers set teacherfname=@teacherfname , teacherlname=@teacherlname , employeenumber=@employeenumber , hiredate=@hiredate , salary=@salary where teacherid=@teacherid";
+
+            cmd.Parameters.AddWithValue("@teacherfname", TeacherInfo.TeacherFName);
+            cmd.Parameters.AddWithValue("@teacherlname", TeacherInfo.TeacherLName);
+            cmd.Parameters.AddWithValue("@employeenumber", TeacherInfo.TeacherEmployeeNumber);
+            cmd.Parameters.AddWithValue("@salary", TeacherInfo.TeacherSalary);
+            cmd.Parameters.AddWithValue("@hiredate", TeacherInfo.TeacherHireDate);
+            cmd.Parameters.AddWithValue("@teacherid", TeacherId);
+
+            cmd.Prepare();
+
+            cmd.ExecuteNonQuery();
+
+            Conn.Close();
         }
 
     }
