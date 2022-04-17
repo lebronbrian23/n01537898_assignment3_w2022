@@ -215,9 +215,9 @@ namespace School.Controllers
         /// <param name="TeacherInfo"></param>
 
         [HttpPost]
-        [Route("api/Teacherdata/AddTeacher")]
+        [Route("api/Teacherdata/UpdateTeacher")]
         [EnableCors(origins: "*", methods: "*", headers: "*")]
-        public void UpdateTeacher(int TeacherId, Teacher TeacherInfo)
+        public void UpdateTeacher([FromUri]int TeacherId, [FromBody]Teacher TeacherInfo)
         {
 
             //create a connection to the db
@@ -230,15 +230,14 @@ namespace School.Controllers
             MySqlCommand cmd = Conn.CreateCommand();
 
             //sql query
-            cmd.CommandText = "update into teachers set teacherfname=@teacherfname , teacherlname=@teacherlname , employeenumber=@employeenumber , hiredate=@hiredate , salary=@salary where teacherid=@teacherid";
+            cmd.CommandText = "update teachers set teacherfname=@teacherfname , employeenumber=@employeenumber , teacherlname=@teacherlname , hiredate=@hiredate , salary=@salary where teacherid=@teacherid";
 
             cmd.Parameters.AddWithValue("@teacherfname", TeacherInfo.TeacherFName);
             cmd.Parameters.AddWithValue("@teacherlname", TeacherInfo.TeacherLName);
-            cmd.Parameters.AddWithValue("@employeenumber", TeacherInfo.TeacherEmployeeNumber);
             cmd.Parameters.AddWithValue("@salary", TeacherInfo.TeacherSalary);
             cmd.Parameters.AddWithValue("@hiredate", TeacherInfo.TeacherHireDate);
             cmd.Parameters.AddWithValue("@teacherid", TeacherId);
-
+            cmd.Parameters.AddWithValue("@employeenumber", TeacherInfo.TeacherEmployeeNumber);
             cmd.Prepare();
 
             cmd.ExecuteNonQuery();

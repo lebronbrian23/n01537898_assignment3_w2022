@@ -56,7 +56,7 @@ namespace School.Controllers
         public ActionResult Create(string teacherfname,string teacherlname , string employeenumber ,
             string salary, string hiredate)
         {
-            if (teacherfname == "" || teacherlname == "" || employeenumber == null || hiredate == null || salary == null)
+            if (teacherfname == "" || teacherlname == "" || employeenumber == "" || hiredate == "" || salary == "")
             {
                 return RedirectToAction("New");
             }
@@ -131,9 +131,9 @@ namespace School.Controllers
         public ActionResult Update(int id ,string teacherfname, string teacherlname, string employeenumber,
             string salary, string hiredate)
         {
-            if (teacherfname == "" || teacherlname == "" || employeenumber == null || hiredate == null  || salary == null)
+            if (teacherfname == "" || teacherlname == "" || employeenumber == "" || hiredate == ""  || salary == "")
             {
-                return RedirectToAction("/Teacher/Edit/" + id);
+                return RedirectToAction("/Edit/" + id);
             }
 
             Teacher UpdateTeacher = new Teacher();
@@ -148,7 +148,7 @@ namespace School.Controllers
             controller.UpdateTeacher(id , UpdateTeacher);
 
             // redirect back to the Teacher after an update
-            return RedirectToAction("/Teacher/Show/"+id);
+            return RedirectToAction("/Show/"+id);
 
         }
 
